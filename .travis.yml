@@ -20,9 +20,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install -y elasticsearch
 install:
-  - sleep 10
-
-  - psql -c "SELECT version();"
   - echo exit | mongo
   - redis-cli "INFO" | grep version
   - curl -XGET "localhost:9200"
