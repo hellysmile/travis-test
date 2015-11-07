@@ -36,6 +36,8 @@ install:
   - pip install virtualenv
   - virtualenv env3
   - source env3/bin/activate
+  - which python
+
   - travis_retry pip install -U pip
   - travis_retry pip install -U setuptools
   - travis_retry pip install -r requirements.txt
