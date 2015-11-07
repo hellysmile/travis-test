@@ -26,10 +26,10 @@ install:
   - sleep 10
 
   - redis-cli 'INFO' | grep redis_version
-  - echo exit | mongo
-  - rabbitmqctl status | grep -ai '"rabbitmq"'
+  - echo exit | mongo | grep version
   - memcached -h | grep memcached | grep 1
-  - curl -XGET "localhost:9200"
+  - curl -XGET "localhost:9200" | grep number
+  - sudo rabbitmqctl status | grep -ai '"rabbitmq"'
   - psql -c "SELECT version();"
 
   - which pip
