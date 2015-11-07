@@ -1,4 +1,5 @@
-sudo: false
+sudo: required
+dist: trusty
 language: python
 python:
   - "3.4"
@@ -6,21 +7,49 @@ env:
   global:
     - DEBIAN_FRONTEND=noninteractive
 before_install:
-  - which pip
+  - sudo service mongod status
+  - sudo service elasticsearch status
+  - sudo service postgresql-9.4 status
+  - sudo service redis-server status
+  - sudo service rabbitmq-server status
+  - sudo service memcached status
+
+  - sudo apt-get install -y software-properties-common
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  - sudo echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+  - sudo wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+  - sudo echo "deb http://packages.elastic.co/elasticsearch/2.0/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elastic.list
+  - sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
+  - sudo wget --quiet -O - https://postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  - sudo apt-add-repository ppa:chris-lea/redis-server
+  - sudo wget --quiet -O - https://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key add -
+  - sudo apt-get update -y
+  - sudo apt-get install -y mongodb-org
+  - sudo apt-get install -y elasticsearch
+  - sudo apt-get install -y postgresql-client-common postgresql-9.4
+  - sudo apt-get install -y redis-server redis-tools
+  - sudo apt-get install -y rabbitmq-server
+  - sudo apt-get install -y memcached
+
+  - sudo service mongod status
+  - sudo service elasticsearch status
+  - sudo service postgresql-9.4 status
+  - sudo service redis-server status
+  - sudo service rabbitmq-server status
+  - sudo service memcached status
+
+  - sudo service mongod start
+  - sudo service elasticsearch start
+  - sudo service postgresql-9.4 start
+  - sudo service redis-server start
+  - sudo service rabbitmq-server start
+  - sudo service memcached start
+
   - python --version
   - curl -XGET "localhost:9200"
   - redis-cli "INFO" | grep version
   - mongod --version
   - psql --version
-services:
-  - mongodb
-  - elasticsearch
-  - postgresql
-  - rabbitmq-server
-  - redis-server
-  - memcached
-addons:
-  postgresql: "9.4"
 install:
   - pip3.4 install virtualenv
   - virtualenv env3
