@@ -19,16 +19,6 @@ before_install:
   - sudo echo "deb http://packages.elastic.co/elasticsearch/2.0/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elastic.list
   - sudo apt-get update
   - sudo apt-get install -y elasticsearch
-
-  - sleep 10
-
-  - psql --version
-  - echo exit | mongo
-  - redis-cli "INFO" | grep version
-  - curl -XGET "localhost:9200"
-  - rabbitmqctl status | grep -ai '"rabbitmq"'
-  - memcached -h | grep memcached | grep 1
-  - which pip
 install:
   - pip install virtualenv
   - virtualenv env3
@@ -38,6 +28,16 @@ install:
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
 before_script:
+  - sleep 10
+
+  - psql -c "SELECT version();"
+  - echo exit | mongo
+  - redis-cli "INFO" | grep version
+  - curl -XGET "localhost:9200"
+  - rabbitmqctl status | grep -ai '"rabbitmq"'
+  - memcached -h | grep memcached | grep 1
+  - which pip
+
   - psql -c "create database app;" -U postgres
 script:
   - flake8 app
