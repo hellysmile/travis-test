@@ -30,7 +30,7 @@ install:
   - memcached -h | grep memcached | grep 1
   - curl -s -XGET "localhost:9200" | grep number
   - sudo rabbitmqctl status | grep -ai '"rabbitmq"'
-  - psql -c "select version();" -U postgres
+  - echo "SHOW server_version;" | psql | grep "9"
 
   - which pip
   - pip install virtualenv
