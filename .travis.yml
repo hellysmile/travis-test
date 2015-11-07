@@ -21,7 +21,6 @@ before_install:
   - travis_retry sudo apt-get update
   - travis_retry sudo apt-get install -y elasticsearch mongodb-org
 
-  - sudo service elasticsearch status
   - sudo service elasticsearch start
 install:
   - echo exit | mongo
