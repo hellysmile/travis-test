@@ -23,10 +23,14 @@ before_install:
 
   - sudo service elasticsearch start
 install:
+  - sleep 10
+
+  - redis-cli 'INFO' | grep redis_version
   - echo exit | mongo
-  - curl -XGET "localhost:9200"
   - rabbitmqctl status | grep -ai '"rabbitmq"'
   - memcached -h | grep memcached | grep 1
+  - curl -XGET "localhost:9200"
+  - psql -c "SELECT version();"
 
   - which pip
   - pip install virtualenv
