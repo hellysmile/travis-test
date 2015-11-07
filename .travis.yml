@@ -19,16 +19,17 @@ before_install:
   - sudo echo "deb http://packages.elastic.co/elasticsearch/2.0/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elastic.list
   - sudo apt-get update
   - sudo apt-get install -y elasticsearch
+
   - sleep 10
-install:
+
   - psql --version
-  - mongod --version
+  - echo exit | mongo
   - redis-cli "INFO" | grep version
   - curl -XGET "localhost:9200"
   - rabbitmqctl status | grep -ai '"rabbitmq"'
   - memcached -h | grep memcached | grep 1
   - which pip
-
+install:
   - pip install virtualenv
   - virtualenv env3
   - source env3/bin/activate
