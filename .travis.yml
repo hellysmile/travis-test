@@ -14,15 +14,13 @@ services:
   - rabbitmq-server
   - memcached
 before_install:
-  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  - travis_retry sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
   - sudo echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
-  - sudo wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+  - travis_retry sudo wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
   - sudo echo "deb http://packages.elastic.co/elasticsearch/2.0/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elastic.list
-  - sudo apt-get update
-  - sudo apt-get install -y elasticsearch mongodb-org
+  - travis_retry sudo apt-get update
+  - travis_retry sudo apt-get install -y elasticsearch mongodb-org
 
-  - sudo service mongod status
-  - sudo service mongod start
   - sudo service elasticsearch status
   - sudo service elasticsearch start
 install:
@@ -35,10 +33,10 @@ install:
   - pip install virtualenv
   - virtualenv env3
   - source env3/bin/activate
-  - pip install -U pip
-  - pip install -U setuptools
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
+  - travis_retry pip install -U pip
+  - travis_retry pip install -U setuptools
+  - travis_retry pip install -r requirements.txt
+  - travis_retry pip install -r requirements-dev.txt
 before_script:
   - psql -c "create database app;" -U postgres
 script:
